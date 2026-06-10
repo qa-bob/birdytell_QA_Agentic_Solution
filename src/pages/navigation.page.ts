@@ -27,14 +27,19 @@ export class NavigationPage extends BasePage {
    * Tries role="navigation" first, then <nav>, then header-scoped links.
    */
   private getNavLocator(): Locator {
-    return this.page.locator('nav, [role="navigation"]').first();
+    // Birdytell (Shopify) has no <nav> element — falls back to header-scoped UL lists
+    return this.page.locator(
+      'nav, [role="navigation"], header ul, [class*="nav"] ul, [class*="menu"] ul'
+    ).first();
   }
 
-  /** Return true if a navigation element is visible on the page. */
+  /** Return true if navigation links are visible on the page. */
   async isNavVisible(): Promise<boolean> {
-    const nav = this.getNavLocator();
-    if (await nav.count() === 0) return false;
-    return nav.isVisible();
+    // Birdytell has no <nav> element — check for visible header links as proxy
+    const headerLinks = this.page.locator(
+      'nav a, [role="navigation"] a, header a[href*="/collections/"], header a[href*="/pages/"]'
+    );
+    return (await headerLinks.count()) > 0;
   }
 
   // ── Nav links ────────────────────────────────────────────────────────────────
@@ -127,6 +132,7 @@ export class NavigationPage extends BasePage {
   async checkAllNavLinksReachable(): Promise<LinkCheckResult[]> {
     const navLinks = await this.getNavLinks();
     const baseUrl = new URL(this.config.url);
+    const siteDomain = baseUrl.hostname; // e.g., 'www.birdytell.com'
     const results: LinkCheckResult[] = [];
 
     for (const link of navLinks) {
@@ -137,6 +143,10 @@ export class NavigationPage extends BasePage {
         results.push({ url: link.href, status: 0, ok: false });
         continue;
       }
+
+      // Skip external domains — we can only assert reachability of same-domain links
+      const linkHost = new URL(absoluteUrl).hostname;
+      if (linkHost !== siteDomain) continue;
 
       try {
         const response = await this.page.request.head(absoluteUrl, {

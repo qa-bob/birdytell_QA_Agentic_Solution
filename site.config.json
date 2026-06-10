@@ -1,23 +1,32 @@
-﻿{
-    "name":  "Birdytell",
-    "url":  "https://www.birdytell.com",
-    "description":  "",
-    "industry":  "",
-    "hasContactForm":  true,
-    "expectedNavItems":  [
-
-                         ],
-    "viewports":  [
-                      "desktop",
-                      "mobile",
-                      "tablet"
-                  ],
-    "skipVisual":  false,
-    "skipForms":  false,
-    "auth":  {
-                 "required":  false,
-                 "loginUrl":  "",
-                 "username":  "",
-                 "password":  ""
-             }
+{
+    "name": "Birdytell",
+    "url": "https://www.birdytell.com",
+    "description": "Arizona-based gifting company featuring local artisans and makers",
+    "industry": "E-commerce / Gift Retail",
+    "hasContactForm": true,
+    "expectedNavItems": [
+        "All Gifts",
+        "Hospitality",
+        "The Concierge",
+        "Residence",
+        "Gathering",
+        "Sanctuary",
+        "New",
+        "Market",
+        "Corporate & Events",
+        "About"
+    ],
+    "viewports": [
+        "desktop",
+        "mobile",
+        "tablet"
+    ],
+    "skipVisual": false,
+    "skipForms": false,
+    "auth": {
+        "required": false,
+        "loginUrl": "",
+        "username": "",
+        "password": ""
+    }
 }

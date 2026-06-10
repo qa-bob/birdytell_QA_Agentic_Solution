@@ -12,7 +12,6 @@ import { test, expect } from '@fixtures/site.fixture';
 test.describe('Navigation @navigation', () => {
   test.beforeEach(async ({ navigationPage }) => {
     await navigationPage.navigate();
-    await navigationPage.waitForLoad();
   });
 
   // ── Visibility ──────────────────────────────────────────────────────────────
@@ -56,7 +55,6 @@ test.describe('Navigation @navigation', () => {
     // Switch to mobile viewport
     await page.setViewportSize({ width: 390, height: 844 });
     await navigationPage.navigate();
-    await navigationPage.waitForLoad();
 
     const toggle = await navigationPage.getMobileMenuToggle();
 

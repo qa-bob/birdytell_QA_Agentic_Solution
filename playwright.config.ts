@@ -80,6 +80,7 @@ export default defineConfig({
       use: {
         ...devices['iPad Mini'],
         viewport: { width: 768, height: 1024 },
+        ignoreHTTPSErrors: true, // WebKit on Windows rejects some SSL certs
       },
     },
   ],

@@ -7,7 +7,7 @@
  */
 
 import { type Page, type Locator } from '@playwright/test';
-import type { SiteConfig } from '@types/site-config.types';
+import type { SiteConfig } from '@site-types/site-config.types';
 
 export class BasePage {
   readonly page: Page;
@@ -24,7 +24,7 @@ export class BasePage {
 
   /** Navigate to the site root URL. */
   async navigate(): Promise<void> {
-    await this.page.goto(this.url, { waitUntil: 'domcontentloaded' });
+    await this.page.goto(this.url, { waitUntil: 'load' });
   }
 
   /** Wait until network activity has settled. */
