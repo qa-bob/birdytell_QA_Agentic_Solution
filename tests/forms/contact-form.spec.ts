@@ -206,31 +206,34 @@ test.describe('Contact Form @forms', () => {
       .locator('button[type="submit"], input[type="submit"], button:not([type="button"]):not([type="reset"])')
       .first();
 
-    // Intercept any navigation that would result from form submission
-    let navigationTriggered = false;
-    page.on('request', (req) => {
-      if (req.resourceType() === 'document' && req.method() === 'POST') {
-        navigationTriggered = true;
+    // Block every non-GET request so nothing can actually be submitted, even
+    // if the form posts via fetch/XHR or validation is missing.
+    const submissionAttempts: string[] = [];
+    await page.route('**/*', async (route) => {
+      const req = route.request();
+      if (req.method() !== 'GET' && req.method() !== 'HEAD') {
+        submissionAttempts.push(`${req.method()} ${req.url()}`);
+        await route.abort();
+        return;
       }
+      await route.continue();
     });
 
     await submitBtn.click({ force: true });
 
-    // Wait briefly to allow validation messages to appear
-    await page.waitForTimeout(500);
-
     // hCaptcha on desktop Chrome may intercept the submit click differently than mobile;
-    // log a warning rather than hard-failing the test suite over third-party CAPTCHA behavior
-    if (navigationTriggered) {
+    // log a warning rather than hard-failing the test suite over third-party CAPTCHA behavior.
+    // Any POST attempt was already blocked above, so nothing reached the server.
+    if (submissionAttempts.some((a) => a.startsWith('POST'))) {
       console.warn(
-        '[forms] Form POST navigation triggered after empty submit — hCaptcha may behave differently on this browser.'
+        '[forms] Form POST attempted (and blocked) after empty submit — hCaptcha may behave differently on this browser.'
       );
     }
 
     // Check for HTML5 validation API on required fields (soft assertion — CAPTCHA may change validity state)
     const firstRequired = form.locator('[required]').first();
     if (await firstRequired.count() > 0) {
-      const isValid = await firstRequired.evaluate<boolean>((el) => {
+      const isValid = await firstRequired.evaluate((el) => {
         return (el as HTMLInputElement).validity?.valid ?? true;
       });
       if (isValid) {

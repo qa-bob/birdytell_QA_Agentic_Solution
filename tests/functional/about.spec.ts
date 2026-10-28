@@ -91,10 +91,7 @@ test.describe('About Page @functional', () => {
       'a[href*="/collections/"], a[href*="/pages/corporate-gifting"]'
     ).first();
 
-    if (await shopOrCorpLink.count() === 0) {
-      console.warn('[functional/about] No shop or corporate links found on about page — skipping.');
-      return;
-    }
+    test.skip(await shopOrCorpLink.count() === 0, 'No shop or corporate links found on about page');
 
     // Check the link exists and has a valid href (not checking visibility — may be in header nav)
     const href = await shopOrCorpLink.getAttribute('href');

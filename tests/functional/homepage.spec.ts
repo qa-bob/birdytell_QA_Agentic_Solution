@@ -63,10 +63,7 @@ test.describe('Homepage Features @functional', () => {
       .locator('a[href*="/pages/corporate-gifting"]')
       .first();
 
-    if (await corporateLink.count() === 0) {
-      console.warn('[functional/homepage] /pages/corporate-gifting link not found on homepage.');
-      return;
-    }
+    test.skip(await corporateLink.count() === 0, '/pages/corporate-gifting link not found on homepage');
 
     const href = await corporateLink.getAttribute('href');
     expect(href).toContain('/pages/corporate-gifting');
@@ -77,10 +74,7 @@ test.describe('Homepage Features @functional', () => {
       .locator('a[href*="builder"]')
       .first();
 
-    if (await builderLink.count() === 0) {
-      console.warn('[functional/homepage] Gift Builder CTA not found — skipping.');
-      return;
-    }
+    test.skip(await builderLink.count() === 0, 'Gift Builder CTA not found');
 
     const href = await builderLink.getAttribute('href');
     expect(href, 'Gift Builder CTA should have a non-empty href').toBeTruthy();
@@ -125,10 +119,7 @@ test.describe('Homepage Features @functional', () => {
       .filter({ hasText: /subscribe|sign up|join|submit/i })
       .first();
 
-    if (await subscribeBtn.count() === 0) {
-      console.warn('[functional/homepage] Subscribe button not found — may use a different label.');
-      return;
-    }
+    test.skip(await subscribeBtn.count() === 0, 'Subscribe button not found');
 
     expect(await subscribeBtn.count()).toBeGreaterThan(0);
   });
@@ -154,10 +145,7 @@ test.describe('Homepage Features @functional', () => {
       'header a:has(img[alt*="birdytell" i]), header a:has(svg)'
     ).first();
 
-    if (await logoLink.count() === 0) {
-      console.warn('[functional/homepage] Could not identify logo link in header.');
-      return;
-    }
+    test.skip(await logoLink.count() === 0, 'Could not identify logo link in header');
 
     expect(await logoLink.count()).toBeGreaterThan(0);
   });

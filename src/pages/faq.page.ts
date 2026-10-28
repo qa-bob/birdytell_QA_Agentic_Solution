@@ -70,10 +70,10 @@ export class FaqPage extends BasePage {
     if (index >= triggers.length) return false;
 
     const trigger = triggers[index];
-    const tagName = await trigger.evaluate<string>((el) => el.tagName.toLowerCase());
+    const tagName = await trigger.evaluate((el) => el.tagName.toLowerCase());
 
     if (tagName === 'summary') {
-      return trigger.evaluate<boolean>((el) => {
+      return trigger.evaluate((el) => {
         const details = el.closest('details');
         return details ? (details as HTMLDetailsElement).open : false;
       });
@@ -92,11 +92,11 @@ export class FaqPage extends BasePage {
     if (index >= triggers.length) return '';
 
     const trigger = triggers[index];
-    const tagName = await trigger.evaluate<string>((el) => el.tagName.toLowerCase());
+    const tagName = await trigger.evaluate((el) => el.tagName.toLowerCase());
 
     if (tagName === 'summary') {
       // Answer is the content of <details> other than the <summary>
-      return trigger.evaluate<string>((el) => {
+      return trigger.evaluate((el) => {
         const details = el.closest('details');
         if (!details) return '';
         const clone = details.cloneNode(true) as HTMLElement;

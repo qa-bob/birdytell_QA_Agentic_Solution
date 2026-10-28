@@ -132,10 +132,7 @@ test.describe('Shop Collections @functional', () => {
       'a[href*="builder"], a[href*="giftbuilder"]'
     ).first();
 
-    if (await builderLink.count() === 0) {
-      console.warn('[functional/shop] Gift Builder link not found in DOM — may require nav expansion.');
-      return;
-    }
+    test.skip(await builderLink.count() === 0, 'Gift Builder link not found in DOM');
 
     const href = await builderLink.getAttribute('href');
     expect(href, 'Gift Builder link should have a non-empty href').toBeTruthy();

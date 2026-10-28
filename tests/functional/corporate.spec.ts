@@ -54,24 +54,18 @@ test.describe('Corporate Gifting Page @functional', () => {
   test('"Shop curated gifts" CTA is present @functional', async ({ corporatePage }) => {
     const cta = await corporatePage.getShopCuratedCTA();
 
-    if (!cta) {
-      console.warn('[functional/corporate] "Shop curated gifts" CTA not found — label may differ.');
-      return;
-    }
+    test.skip(!cta, '"Shop curated gifts" CTA not found');
 
-    const href = await cta.getAttribute('href');
+    const href = await cta!.getAttribute('href');
     expect(href, '"Shop curated gifts" should have a valid href').toBeTruthy();
   });
 
   test('"Build your gifts" CTA exists and links to the Gift Builder @functional', async ({ corporatePage }) => {
     const cta = await corporatePage.getGiftBuilderCTA();
 
-    if (!cta) {
-      console.warn('[functional/corporate] Gift Builder CTA not found — label may differ.');
-      return;
-    }
+    test.skip(!cta, 'Gift Builder CTA not found');
 
-    const href = await cta.getAttribute('href');
+    const href = await cta!.getAttribute('href');
     expect(href, '"Build your gifts" link should have a non-empty href').toBeTruthy();
   });
 
